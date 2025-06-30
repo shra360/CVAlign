@@ -1,0 +1,103 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper functions
+    function isAuthenticated(request) {
+      return request.auth != null;
+    }
+
+    function isOwner(request, userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isValidImage(request) {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.size < 5 * 1024 * 1024;
+    }
+
+    function isValidDocument(request) {
+      return request.resource.contentType.matches('application/(pdf|msword|vnd.openxmlformats-officedocument.wordprocessingml.document)') &&
+             request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // Profile pictures
+    match /profiles/{userId}/{fileName} {
+      allow read: if isAuthenticated(request);
+      allow write: if isAuthenticated(request) &&
+        isOwner(request, userId) &&
+        isValidImage(request);
+    }
+
+    // Resume files
+    match /resumes/{userId}/{fileName} {
+      allow read: if isAuthenticated(request) &&
+        (isOwner(request, userId) ||
+        request.auth.uid in resource.metadata.allowedRecruiters);
+      allow write: if isAuthenticated(request) &&
+        isOwner(request, userId) &&
+        isValidDocument(request);
+    }
+
+    // Job attachments
+    match /jobs/{jobId}/attachments/{fileName} {
+      allow read: if isAuthenticated(request);
+      allow write: if isAuthenticated(request) &&
+        request.auth.uid == resource.metadata.recruiterId &&
+        isValidDocument(request);
+    }
+
+    // Job descriptions - recruiters can upload when creating a job
+    match /job-descriptions/{recruiterId}/{fileName} {
+      allow read: if isAuthenticated(request);
+      allow write: if isAuthenticated(request) && isOwner(request, recruiterId) && isValidDocument(request);
+    }
+
+    // Application attachments
+    match /applications/{applicationId}/attachments/{fileName} {
+      allow read: if isAuthenticated(request) &&
+        (request.auth.uid == resource.metadata.candidateId ||
+         request.auth.uid == resource.metadata.recruiterId);
+      allow write: if isAuthenticated(request) &&
+        request.auth.uid == request.resource.metadata.candidateId &&
+        isValidDocument(request);
+    }
+
+    // Chat attachments
+    match /chats/{chatId}/attachments/{fileName} {
+      allow read: if isAuthenticated(request) &&
+        request.auth.uid in resource.metadata.participants;
+      allow write: if isAuthenticated(request) &&
+        request.auth.uid in request.resource.metadata.participants &&
+        (isValidImage(request) || isValidDocument(request));
+    }
+
+    // Company logos
+    match /companies/{companyId}/{fileName} {
+      allow read: if isAuthenticated(request);
+      allow write: if isAuthenticated(request) &&
+        request.auth.uid == resource.metadata.ownerId &&
+        isValidImage(request);
+    }
+
+    // Temporary uploads
+    match /temp/{userId}/{fileName} {
+      allow read: if isAuthenticated(request) && isOwner(request, userId);
+      allow write: if isAuthenticated(request) &&
+        isOwner(request, userId) &&
+        (isValidImage(request) || isValidDocument(request));
+      allow delete: if isAuthenticated(request) && isOwner(request, userId);
+    }
+
+    // Public assets
+    match /public/{fileName} {
+      allow read: if isAuthenticated(request);
+      allow write: if false;
+    }
+
+    // Catch-all
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
