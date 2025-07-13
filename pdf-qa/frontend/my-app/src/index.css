@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-secondary-200;
+  }
+  
+  body {
+    @apply bg-secondary-50 text-secondary-900 font-sans;
+  }
+
+  /* Dark mode styles */
+  .dark body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+  }
+
+  .dark .bg-white {
+    background-color: #1e293b;
+  }
+
+  .dark .bg-secondary-50 {
+    background-color: #0f172a;
+  }
+
+  .dark .border-secondary-200 {
+    border-color: #334155;
+  }
+
+  .dark .border-secondary-300 {
+    border-color: #475569;
+  }
+
+  .dark .bg-secondary-100 {
+    background-color: #334155;
+  }
+
+  .dark .bg-secondary-200 {
+    background-color: #475569;
+  }
+
+  .dark .shadow-sm {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .shadow-md {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Additional dark mode overrides for better visibility */
+  .dark .text-black {
+    color: #ffffff;
+  }
+
+  .dark .bg-gray-50 {
+    background-color: #111827;
+  }
+
+  .dark .bg-gray-100 {
+    background-color: #1f2937;
+  }
+
+  .dark .bg-gray-200 {
+    background-color: #374151;
+  }
+
+  .dark .border-gray-200 {
+    border-color: #374151;
+  }
+
+  .dark .border-gray-300 {
+    border-color: #4b5563;
+  }
+
+  /* Ensure all text inputs are visible in dark mode */
+  .dark input[type="text"],
+  .dark input[type="email"],
+  .dark input[type="password"],
+  .dark input[type="number"],
+  .dark input[type="search"],
+  .dark input[type="url"],
+  .dark input[type="tel"],
+  .dark textarea,
+  .dark select {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border-color: #475569;
+  }
+
+  .dark input[type="text"]::placeholder,
+  .dark input[type="email"]::placeholder,
+  .dark input[type="password"]::placeholder,
+  .dark input[type="number"]::placeholder,
+  .dark input[type="search"]::placeholder,
+  .dark input[type="url"]::placeholder,
+  .dark input[type="tel"]::placeholder,
+  .dark textarea::placeholder {
+    color: #94a3b8;
+  }
+
+  /* Ensure buttons are visible in dark mode */
+  .dark button {
+    color: #f1f5f9;
+  }
+
+  /* Ensure links are visible in dark mode */
+  .dark a {
+    color: #f1f5f9;
+  }
+
+  .dark a:hover {
+    color: #e2e8f0;
+  }
+
+  /* Ensure form labels are visible */
+  .dark label {
+    color: #e2e8f0;
+  }
+
+  /* Ensure headings are visible */
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5,
+  .dark h6 {
+    color: #f1f5f9;
+  }
+
+  /* Ensure paragraphs are visible */
+  .dark p {
+    color: #e2e8f0;
+  }
+
+  /* Ensure spans are visible */
+  .dark span {
+    color: #e2e8f0;
+  }
+
+  /* Ensure divs with text are visible */
+  .dark div {
+    color: #e2e8f0;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+  .btn-secondary {
+    @apply bg-secondary-100 hover:bg-secondary-200 text-secondary-900 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+  }
+
+  .dark .btn-secondary {
+    background-color: #334155;
+    color: #f1f5f9;
+  }
+
+  .dark .btn-secondary:hover {
+    background-color: #475569;
+  }
+
+  .btn-outline {
+    @apply border border-primary-600 text-primary-600 hover:bg-primary-50 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .dark .btn-outline:hover {
+    background-color: #1e3a8a;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-secondary-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200;
+  }
+
+  .dark .input-field {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border-color: #475569;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-secondary-200 p-6;
+  }
+
+  .dark .card {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-md transition-shadow duration-200;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-800;
+  }
+  
+  .bg-gradient-secondary {
+    @apply bg-gradient-to-r from-secondary-600 to-secondary-800;
+  }
+}
